@@ -1,28 +1,16 @@
 <?php
 
-$books = [
-    [
-        "name" => "Atomic Habits",
-        "author" => "Andy Weir",
-        "releaseYear" => 2019,
-        "purchaseUrl" => "https://www.example.com"
-    ],
-    [
-        "name" => "The subtle art of not giving a fuck",
-        "author" => "Philip K. Dick",
-        "releaseYear" => 2020,
-        "purchaseUrl" => "https://www.polo.com"
-    ],
-    [
-        "name" => "The Alchemist",
-        "author" => "Chinaswamy Mutuswamy",
-        "releaseYear" => 2021,
-        "purchaseUrl" => "https://www.laadle.com"
-    ]
-];
+require "functions.php";
+require "router.php";
 
-$filteredBooks = array_filter($books, function($book) {
-    return $book['name'] === "The Alchemist";
-});
+// connect to mysql database
+$dsn = "mysql:host=127.0.0.1;port=3306;dbname=myapp;charset=utf8mb4";
+$pdo = new PDO($dsn, "root");
+$statement = $pdo->prepare("select * from posts");
+$statement->execute();
 
-include "index.view.php";
+$posts = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($posts as $post) {
+    echo "<li>" . $post['title'] . "</li>";
+}
