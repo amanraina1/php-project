@@ -1,17 +1,6 @@
 <?php
 
-// this function is used to remove the query parameters from the ur and only get the actual url
-$uri = parse_url($_SERVER['REQUEST_URI'])['path'];
-
-// routes map
-$routes = [
-
-    '/' => 'controllers/index.php',
-    '/about' => 'controllers/about.php',
-    '/contact' => 'controllers/contact.php',
-    '/notes' => 'controllers/notes.php',
-    '/note' => 'controllers/note.php',
-];
+$routes = require "routes.php";
 
 // route to controller mapping
 function routeToController($uri, $routes) {
@@ -35,5 +24,8 @@ function abort($code = 404) {
 
     die();
 }
+
+// this function is used to remove the query parameters from the ur and only get the actual url
+$uri = parse_url($_SERVER['REQUEST_URI'])['path'];
 
 routeToController($uri, $routes);
