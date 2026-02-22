@@ -2,44 +2,60 @@
 
 namespace Core;
 
+use Core\Middleware\Middleware;
+
 class Router{
 
     protected $routes = [];
 
-    public function add($method, $uri, $controller)
+    public function add($method, $uri, $controller, $middleware = null)
     {
-        $this->routes[] = compact('method', 'uri', 'controller');
+        $this->routes[] = compact('method', 'uri', 'controller', 'middleware');
+
+        return $this;
     }
 
     public function get($uri, $controller)
     {
-        $this->add('GET', $uri, $controller);
+        return $this->add('GET', $uri, $controller);
     }
 
     public function post($uri, $controller)
     {
-        $this->add('POST', $uri, $controller);
+        return $this->add('POST', $uri, $controller);
     }
 
     public function patch($uri, $controller)
     {
-        $this->add('PATCH', $uri, $controller);
+        return $this->add('PATCH', $uri, $controller);
     }
 
     public function delete($uri, $controller)
     {
-        $this->add('DELETE', $uri, $controller);
+        return $this->add('DELETE', $uri, $controller);
     }
 
     public function put($uri, $controller)
     {
-        $this->add('PUT', $uri, $controller);
+        return $this->add('PUT', $uri, $controller);
+    }
+
+    public function only($key)
+    {
+        // only is the chained method, so whenever it is called, it means it is applied to the last element in the routes array
+        $this->routes[array_key_last($this->routes)]['middleware'] = $key;
+
+        return $this;
     }
 
     public function route($uri, $method)
     {
         foreach ($this->routes as $route) {
             if($route['uri'] === $uri && $route['method'] === strtoupper($method)) {
+
+                // get middleware class from the map and instantiate
+                Middleware::resolve($route['middleware']);
+
                 return require base_path($route['controller']);
             }
         }
