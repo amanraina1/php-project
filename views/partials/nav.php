@@ -11,7 +11,9 @@
                         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-white/5 hover:text-white" -->
                         <a href="/" aria-current="page" class="<?php echo urlIs('/') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white' ?> rounded-md px-3 py-2 text-sm font-medium">Home</a>
                         <a href="/about" class="<?php echo urlIs('/about') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white' ?> text-gray-300 hover:bg-white/5 hover:text-white rounded-md px-3 py-2 text-sm font-medium">About</a>
-                        <a href="/notes" class="<?php echo urlIs('/notes') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white' ?> text-gray-300 hover:bg-white/5 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Notes</a>
+                        <?php if($_SESSION['user'] ?? false): ?>
+                            <a href="/notes" class="<?php echo urlIs('/notes') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white' ?> text-gray-300 hover:bg-white/5 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Notes</a>
+                        <?php endif;?>
                         <a href="/contact" class="<?php echo urlIs('/contact') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white' ?> rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Contact</a>
                     </div>
                 </div>
@@ -28,8 +30,17 @@
 
                     <?php if($_SESSION['user'] ?? false): ?>
                         <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-8 ml-2 rounded-full outline -outline-offset-1 outline-white/10" />
+                        <div class="ml-4">
+                            <form method="POST" action="/session">
+                                <input type="hidden" name="_method" value="DELETE" />
+                                <button type="submit" class="text-gray-300 hover:bg-white/5 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Log Out</button>
+                            </form>
+                        </div>
                     <?php else:?>
-                        <a href="/register" class="text-white">Register</a>
+                    <p class="gap-2">
+                        <a href="/register" class="<?php echo urlIs('/register') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white' ?> text-gray-300 hover:bg-white/5 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Register</a>
+                        <a href="/login" class="<?php echo urlIs('/login') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white' ?> text-gray-300 hover:bg-white/5 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Login</a>
+                    </p>
                     <?php endif;?>
                 </div>
             </div>
