@@ -56,7 +56,7 @@ class Router{
                 // get middleware class from the map and instantiate
                 Middleware::resolve($route['middleware']);
 
-                return require base_path($route['controller']);
+                return require base_path("Http/controllers/{$route['controller']}");
             }
         }
 
