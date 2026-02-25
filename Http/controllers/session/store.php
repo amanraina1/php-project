@@ -6,22 +6,22 @@ use Core\Database;
 use Core\App;
 use Http\Forms\LoginForm;
 
-$email = $_POST['email'];
-$password = $_POST['password'];
+$db = App::resolve(Database::class);
 
 // first, validate the form data
-$form = new LoginForm();
+$form = LoginForm::validate($attributes = [
+    'email' => $_POST['email'],
+    'password' => $_POST['password']
+]);
 
-if ($form->validate($email, $password))
-{
-    // then check if user exists, if yes, then match password otherwise redirect to login page
-    $db = App::resolve(Database::class);
+$signedIn = (new Authenticator($db))->attempt(
+    $attributes['email'], $attributes['password']
+);
 
-    if((new Authenticator($db))->attempt($email, $password)) {
-        redirect('/');
-    }
-
-    $form->error('email', 'No matching account found for this email address.');
+// then check if user exists, if yes, then match password otherwise redirect to login page
+if(! $signedIn) {
+    $form->error(
+        'email', 'No matching account found for this email address.'
+    )->throwException();
 }
-
-redirect('/login');
+redirect('/');

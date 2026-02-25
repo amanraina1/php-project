@@ -63,6 +63,11 @@ class Router{
         $this->abort();
     }
 
+    public function previousUrl()
+    {
+        return $_SERVER['HTTP_REFERER'];
+    }
+
     // for aborting the request
     protected function abort($code = 404)
     {
